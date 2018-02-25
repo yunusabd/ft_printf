@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/20 18:32:51 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/02/12 23:33:51 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/02/20 20:50:43 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,5 @@ void				ft_print_array(const char **arr);
 int					ft_sqrt(const int nb);
 
 char				*ft_strdup_until(const char *s, const char *end);
+char				*ft_strpbrk(const char *s1, const char *s2);
 #endif

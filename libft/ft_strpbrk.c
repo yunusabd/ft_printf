@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_strpbrk.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/22 19:43:33 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/02/20 20:26:51 by yabdulha         ###   ########.fr       */
+/*   Created: 2018/02/20 20:30:42 by yabdulha          #+#    #+#             */
+/*   Updated: 2018/02/20 20:43:35 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strpbrk(const char *s1, const char *s2)
 {
-	int		i;
-
-	if (!s)
-		return (NULL);
-	i = 0;
-	while (s[i] != '\0')
+	while (*s1)
 	{
-		if (s[i] == (char)c)
-			return ((char*)s + i);
-		i++;
+		if (strchr(s2, *s1++))
+			return (char*)--s1;
 	}
-	if (s[i] == (char)c)
-		return ((char*)s + i);
 	return (NULL);
 }

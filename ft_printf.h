@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/13 12:03:52 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/02/19 15:18:43 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/02/21 09:09:19 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,7 @@ typedef struct s_printf
 	char		converter;
 
 }				t_printf;
+
+char	*parse_spec(const char *str, t_printf *specs);
 
 #endif
