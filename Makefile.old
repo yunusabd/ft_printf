@@ -1,0 +1,43 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2018/03/06 11:47:58 by yabdulha          #+#    #+#              #
+#    Updated: 2018/03/08 15:11:24 by yabdulha         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+NAME = libftprintf.a
+CC = gcc
+FILES = ft_printf parser
+LIBFT_PATH = libft
+LIBFT = $(LIBFT_PATH)/libft.a
+FT_C = $(patsubst %,%.c,$(FILES))
+OBJ = $(patsubst %,%.o,$(FILES))
+#OBJ = ${FT_C:.c=.o}
+HEADER = libft/libft.h ft_printf.h
+
+.PHONY: all clean fclean re
+
+all: $(NAME)
+
+$(OBJ):
+	make -C libft
+	$(CC) -L $(LIBFT_PATH) -lft $(LIBFT) -c $(FT_C)
+
+$(NAME): $(OBJ)
+	ar rc $(NAME) $(OBJ)
+	ranlib $(NAME)
+
+clean:
+	make clean -C libft 
+	/bin/rm -f $(OBJ)
+
+fclean: clean
+	make fclean -C libft 
+	/bin/rm -f $(NAME)
+
+re: fclean all

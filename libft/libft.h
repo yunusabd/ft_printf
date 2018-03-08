@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/20 18:32:51 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/02/20 20:50:43 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/03/08 17:01:50 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char				*ft_strtrim(char const *s);
 char				**ft_strsplit(char const *s, char c);
 char				*ft_itoa(int n);
 void				ft_putchar(char c);
-void				ft_putstr(char const *s);
+int					ft_putstr(char const *s);
 void				ft_putendl(char const *s);
 void				ft_putnbr(int n);
 void				ft_putchar_fd(char c, int fd);
@@ -97,4 +97,6 @@ int					ft_sqrt(const int nb);
 
 char				*ft_strdup_until(const char *s, const char *end);
 char				*ft_strpbrk(const char *s1, const char *s2);
+char				*ft_itoa_base(int value, int base);
+int					ft_numlen(int nb, int base);
 #endif

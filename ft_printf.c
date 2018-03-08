@@ -6,11 +6,11 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 20:44:26 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/02/25 15:29:31 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/03/08 17:05:32 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "includes/ft_printf.h"
 
 #include <wchar.h>
 
@@ -19,16 +19,17 @@ int		print_arg(va_list ap, t_printf *specs)
 	int		d;
 	char	*s;
 	char	*tmp;
+	int		count;
 
+	count = 0;
 	if (specs->converter == 'd')
-	{
 		d = va_arg(ap, int);
-		printf("[%d]", d);
-	}
 	if (specs->converter == 's')
 	{
 		s = va_arg(ap, char*);
-		if (specs->width > ft_strlen(s))
+		if (specs->width == -1)
+			count += ft_putstr(s);
+		else
 		{
 			tmp = ft_strnew(specs->width - ft_strlen(s));
 			tmp = ft_memset((void*)tmp, ' ', (specs->width - ft_strlen(s)));
@@ -36,11 +37,14 @@ int		print_arg(va_list ap, t_printf *specs)
 				s = ft_strjoin(s, tmp);
 			else
 				s = ft_strjoin(tmp, s);
+			while (specs->precision-- != 0 && *s)
+			{
+				ft_putchar(*s++);
+				count++;
+			}
 		}
-		while (specs->precision-- != 0 && *s)
-			ft_putchar(*s++);
 	}
-	return (0);
+	return (count);
 }
 
 int		ft_printf(const char *format, ...)
@@ -50,35 +54,34 @@ int		ft_printf(const char *format, ...)
 	t_printf	new;
 
 	va_start(ap, format);
+	new.printed = 0;
 	while (*format)
 	{
 		if (*format != '%')
 		{
 			ft_putchar(*format);
 			format++;
+			new.printed++;
 		}
 		else 
 		{
 			format = parse_spec(format, &new);
-			print_arg(ap, &new);
+			new.printed = print_arg(ap, &new);
 		}
 	}
 	va_end(ap);
-	return (1);
+	return (new.printed);
 }
 
-int		main()
+size_t		ft_wchar_len(wchar_t wc)
 {
-	char		*str = "中文";
-	int			myiny = 42;
-	char		c = 'a';
-	char		*ptr;
-	wchar_t		*wc = L"蹩鎞";
-	const wchar_t me = 0x1F378;
-
-
-	//printf("%.s", "popo");
-	//ft_printf("ft_printf string:\n[%#10.2.11s]", str);
-	printf("\nprintf string:\n[%ls]", wc);
+	if ((int)wc >= 0 && (int)wc <= 0x7F)
+		return (1);
+	else if ((int)wc <= 0x7FF)
+		return (2);
+	else if ((int)wc <= 0xFFFF)
+		return (3);
+	else if ((int)wc <= 0x10FFFF)
+		return (4);
 	return (0);
 }
