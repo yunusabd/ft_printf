@@ -1,31 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcpy_until.c                                  :+:      :+:    :+:   */
+/*   ft_itoa_base_umax.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/02/12 23:13:16 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/03/15 18:46:06 by yabdulha         ###   ########.fr       */
+/*   Created: 2018/03/14 12:43:56 by yabdulha          #+#    #+#             */
+/*   Updated: 2018/03/14 12:45:51 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char		*ft_strdup_until(const char *s, const char *end)
+char	*ft_itoa_base_umax(uintmax_t value, int base)
 {
-	size_t		i;
-	char		*new;
+	char	*buff;
+	char	*digits;
+	int		len;
+	int		tmp;
 
-	i = 0;
-	while (s[i] && &s[i] != end)
-		i++;
-	new = ft_strnew(i);
-	i = 0;
-	while (s[i] && &s[i] != end)
+	if (base < 2 || base > 16)
+		return (NULL);
+	len = ft_numlen_umax(value, base);
+	tmp = ABS(value % base);
+	value /= base;
+	value = ABS(value);
+	buff = ft_strnew(len);
+	digits = "0123456789ABCDEF";
+	buff[len - 1] = digits[tmp];
+	while (--len && value)
 	{
-		new[i] = s[i];
-		i++;
+		buff[len - 1] = digits[value % base];
+		value /= base;
 	}
-	return (new);
+	return (buff);
 }

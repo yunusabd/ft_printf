@@ -6,7 +6,7 @@
 #    By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/10 22:06:52 by yabdulha          #+#    #+#              #
-#    Updated: 2018/03/05 02:36:39 by yabdulha         ###   ########.fr        #
+#    Updated: 2018/03/14 12:45:26 by yabdulha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,9 @@ FILES = ft_putchar ft_putstr ft_strcmp ft_strlen ft_strdup ft_strcpy ft_strcat \
 		ft_putstr_fd ft_putendl_fd ft_putnbr_fd ft_lstnew ft_lstdelone \
 		ft_lstdel ft_lstadd ft_lstiter ft_lstmap ft_strndup ft_strrev \
 		ft_absolute ft_print_array ft_sqrt ft_strjoinfree ft_strdup_until \
-		ft_strpbrk ft_itoa_base ft_numlen
+		ft_strpbrk ft_itoa_base ft_numlen ft_itoa_base_ll ft_numlen_ll \
+		ft_numlen_max ft_numlen_umax ft_itoa_base_umax ft_itoa_base_max \
+		ft_tolowercase
 FT_C =	$(patsubst %,%.c,$(FILES))
 OBJ  =	$(patsubst %,%.o,$(FILES))
 

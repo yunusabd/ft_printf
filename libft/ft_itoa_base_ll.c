@@ -1,31 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcpy_until.c                                  :+:      :+:    :+:   */
+/*   ft_itoa_base_ll.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/02/12 23:13:16 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/03/15 18:46:06 by yabdulha         ###   ########.fr       */
+/*   Created: 2018/03/11 21:18:41 by yabdulha          #+#    #+#             */
+/*   Updated: 2018/03/11 21:20:24 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char		*ft_strdup_until(const char *s, const char *end)
+char	*ft_itoa_base_ll(long long value, int base)
 {
-	size_t		i;
-	char		*new;
+	char	*buff;
+	char	*digits;
+	int		len;
+	int		minus;
 
-	i = 0;
-	while (s[i] && &s[i] != end)
-		i++;
-	new = ft_strnew(i);
-	i = 0;
-	while (s[i] && &s[i] != end)
+	if (base < 2 || base > 16)
+		return (NULL);
+	minus = (value < 0 && base == 10) ? 1 : 0;
+	value *= (value < 0) ? -1 : 1;
+	len = ft_numlen_ll(value, base) + minus;
+	buff = ft_strnew(len);
+	digits = "0123456789ABCDEF";
+	while (len--)
 	{
-		new[i] = s[i];
-		i++;
+		buff[len] = digits[value % base];
+		value /= base;
 	}
-	return (new);
+	if (minus)
+		buff[0] = '-';
+	return (buff);
 }
