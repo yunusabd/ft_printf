@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa_base_umax.c                                :+:      :+:    :+:   */
+/*   ft_itoa_base_u.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/14 12:43:56 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/03/14 12:45:51 by yabdulha         ###   ########.fr       */
+/*   Created: 2018/03/16 20:35:42 by yabdulha          #+#    #+#             */
+/*   Updated: 2018/03/16 20:35:51 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_itoa_base_umax(uintmax_t value, int base)
+char	*ft_itoa_base_u(unsigned long long value, int base)
 {
 	char	*buff;
 	char	*digits;

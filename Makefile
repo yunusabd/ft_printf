@@ -1,7 +1,7 @@
 NAME = libftprintf.a
 
 SRCS_PATH =  
-SRCS = ft_printf.c parser.c converter.c uconverter.c padding.c
+SRCS = ft_printf.c parser.c converter.c uconverter.c padding.c convert_unicode.c
 
 OBJS = $(SRCS:.c=.o)
 

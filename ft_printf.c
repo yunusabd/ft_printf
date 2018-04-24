@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 20:44:26 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/03/15 17:33:44 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/24 17:33:26 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ int		print_arg(va_list ap, t_printf *specs)
 	int				count;
 
 	count = 0;
-	if (specs->converter == '%')
-		s = padding("", specs);
+	if (!specs->converter)
+		s = NULL;
+	else if (specs->converter == '%')
+		s = padding(ft_strdup("%\0"), specs);
 	else if (specs->converter == 'p')
 		s = convert_p(ap, specs);
 	else if (specs->converter == 'x' || specs->converter == 'X')
@@ -32,27 +34,34 @@ int		print_arg(va_list ap, t_printf *specs)
 		s = convert_d(ap, specs);
 	else if (specs->converter == 'u' || specs->converter == 'U')
 		s = convert_u(ap, specs);
-	else if (specs->converter == 'c')
+	else if (specs->converter == 'c' || specs->converter == 'C')
 	{
 		s = convert_c(ap, specs);
 		if (s == NULL)
 		{
 			specs->precision = 0;
 			specs->width--;
-			s = padding("", specs);
+			s = padding(ft_strdup(""), specs);
 			count += ft_putstr(s);
 			ft_putchar('\0');
 			return (count + 1);
 		}
 	}
-	else if (specs->converter == 's')
+	else if (specs->converter == 's' || specs->converter == 'S')
 	{
-		s = va_arg(ap, char*);
+		if (specs->converter == 'S')
+			s = wstring(va_arg(ap, wchar_t*));
+		else
+			s = va_arg(ap, char*);
 		if (!s)
-			s = ft_strdup("(null)");
+			s = "(null)";
 		s = convert_s(s, specs);
 	}
+	else
+		s = ft_strdup("no input");
+	printf("s  : %p\n", s);
 	count += ft_putstr(s);
+	free(s);
 	return (count);
 }
 
@@ -62,23 +71,35 @@ int		ft_printf(const char *format, ...)
 	int			i;
 	t_printf	new;
 	int			ret;
+	char		*tmp;
 
 	va_start(ap, format);
 	ret = 0;
+	i = 0;
+	tmp = ft_strnew(BUFFSIZE);
 	while (*format)
 	{
-		if (*format != '%')
+		while (i < BUFFSIZE && *format  && *format != '%')
 		{
-			ft_putchar(*format);
+			tmp[i] = *format;
+			i++;
 			format++;
 			ret++;
 		}
-		else 
+		if (i)
+			write(1, tmp, i);
+		ft_bzero((void*)tmp, i);
+		i = 0;
+		if (*format == '%')
 		{
+			ft_memset(&new, 0, sizeof(t_printf));
 			format = parse_spec(format + 1, &new);
 			ret += print_arg(ap, &new);
 		}
 	}
+	if (i)
+		write(1, tmp, i);
+	free(tmp);
 	va_end(ap);
 	return (ret);
 }

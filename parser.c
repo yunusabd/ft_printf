@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 16:29:14 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/03/15 18:54:02 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/03/17 23:05:28 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,6 @@ static char	*set_len(char *fstr, int *len_conv, int offset)
 
 static char	*get_len(char *fstr, t_printf *specs)
 {
-	specs->ishh = 0;
-	specs->ish = 0;
-	specs->isll = 0;
-	specs->isl = 0;
-	specs->isj = 0;
-	specs->isz = 0;
 	if (!fstr || !ft_isalpha(*fstr))
 		return (fstr);
 	if (ft_strncmp(fstr, "ll", 2) == 0)
@@ -46,11 +40,6 @@ static char	*get_len(char *fstr, t_printf *specs)
 
 static char	*get_flags(char *fstr, t_printf *new)
 {
-	new->ishash = 0;
-	new->iszero = 0;
-	new->isminus = 0;
-	new->isspace = 0;
-	new->isplus = 0;
 	while (fstr)
 	{
 		if (*fstr == '#')
@@ -74,7 +63,7 @@ static char	*find_specifier(const char *str, t_printf *specs)
 {
 	char	*ptr;
 
-	ptr = NULL;
+	ptr = (char*)str;
 	while (*str)
 	{
 		if ((ptr = ft_strpbrk(str, SPECIFIERS)))
@@ -108,7 +97,6 @@ static int	get_precision(t_printf *specs, char *spec_pos)
 	char	*pos;
 
 	pos = spec_pos;
-	specs->precision = -1;
 	while (*(--pos) != '%')
 	{
 		if (*pos == '.')
@@ -124,44 +112,29 @@ static int	get_precision(t_printf *specs, char *spec_pos)
 ** TODO If no converter is found, print the characters
 */
 
-static char	*handle_percent(const char *str, char *pos, t_printf *specs)
-{
-	char	*fstr;
-
-	printf("fstr: %s\n", str);
-	specs->converter = '%';
-	fstr = ft_strdup_until(str, pos + 1);
-
-	fstr = get_flags(fstr, specs);
-	if (!(get_width(specs, pos)))
-		specs->width = -1;
-	if (!(get_precision(specs, pos)))
-		specs->precision = -1;
-	fstr = get_len(fstr, specs);
-	return (pos);
-}
-
 char		*parse_spec(const char *str, t_printf *specs)
 {
 	char		*pos;
 	char		*fstr;
+	char		*tmp;
 
 	pos = NULL;
-	specs->negative = 0;
-	specs->printed = 0;
 	if ((pos = find_specifier(str, specs)))
 	{
-		if (*pos == '%')
-			return (handle_percent(str, pos, specs));
-		ft_strncpy(&specs->converter, pos, 1);
-		fstr = ft_strdup_until(str, pos + 1);
+//		ft_strncpy(&specs->converter, pos, 1);
+		specs->converter = *pos;
+		fstr = ft_strndup(str, pos + 1 - str);
+		tmp = fstr;
 		fstr = get_flags(fstr, specs);
 		if (!(get_width(specs, pos)))
 			specs->width = -1;
 		if (!(get_precision(specs, pos)))
 			specs->precision = -1;
 		fstr = get_len(fstr, specs);
+		free(tmp);
 		return (pos + 1);
 	}
-	return (pos);
+	else
+		specs->converter = 0;
+	return ((char*)str);
 }

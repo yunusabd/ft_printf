@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/20 18:32:51 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/03/14 19:32:15 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/03/18 15:36:18 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int					ft_strequ(char const *s1, char const *s2);
 int					ft_strnequ(char const *s1, char const *s2, size_t n);
 char				*ft_strsub(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
-char				*ft_strjoinfree(char *s1, char const *s2);
+char				*ft_strjoinfree(char *s1, char *s2, int del);
 char				*ft_strtrim(char const *s);
 char				**ft_strsplit(char const *s, char c);
 char				*ft_itoa(int n);
@@ -99,13 +99,13 @@ int					ft_sqrt(const int nb);
 
 char				*ft_strdup_until(const char *s, const char *end);
 char				*ft_strpbrk(const char *s1, const char *s2);
-char				*ft_itoa_base(int value, int base);
+char				*ft_itoa_base(long long value, int base);
 int					ft_numlen(int nb, int base);
-char				*ft_itoa_base_ll(long long value, int base);
 int					ft_numlen_ll(long long nb, int base);
-char				*ft_itoa_base_max(intmax_t value, int base);
-char				*ft_itoa_base_umax(uintmax_t value, int base);
+char				*ft_itoa_base_u(unsigned long long value, int base);
 int					ft_numlen_max(intmax_t nb, int base);
 int					ft_numlen_umax(uintmax_t nb, int base);
 char				ft_tolowercase(char c);
+
+char				*ft_strmap_p(char *s, char (*f)(char));
 #endif

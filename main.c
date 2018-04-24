@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 23:06:43 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/03/15 18:50:37 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/24 17:37:35 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,11 @@ void			print_struct(t_printf *specs)
 
 int		main()
 {
-	char		*str = "中文";
-	char		*this = "this";
-	char		*string = "string";
-	char		c = 'a';
-	char		*ptr;
-	wchar_t		*wc = L"蹩鎞";
-	const wchar_t me = 0x1F378;
-	int			res;
+	int res = 0;;
 
-	res = ft_printf("%");
-	printf("\nResult: %d\n", res);
-	printf("\nResult: %d\n", printf("%"));
-	printf("\n");
-	//printf("\nprintf string:\n[%ls]", wc);
-	//write(1, "[杯]\n", ft_wchar_len(L'杯') + 3);
-	//printf("blakgjsdf %lu\n", ft_wchar_len(L''));
+	//res = ft_printf("%20.15d\n", 54321);;
+	//printf("\nResult: %d\n", res);
+	printf("\nResult: %d\n", ft_printf("[%-5d]\n", -42));
+	while (1);
 	return (0);
 }

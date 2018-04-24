@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 21:10:54 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/03/14 19:44:19 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/24 17:48:54 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ static char	*handle_precision(char *str, t_printf *specs, int pm)
 	int		diff;
 
 	if (specs->precision == 0)
-		return ("");
+		return (ft_strdup(""));
 	diff = specs->precision - ft_strlen(str);
 	diff += (pm == 1 && ((specs->isplus && specs->isminus)
 				|| specs->negative)) ? 1 : 0;
 	tmp = ft_strnew(diff);
 	tmp = ft_memset((void*)tmp, '0', diff);
-	return (ft_strjoin(tmp, str));
+	return (ft_strjoinfree(tmp, str, 3));
 }
 
 static char	*handle_width(char *str, t_printf *specs, int pm)
@@ -32,6 +32,7 @@ static char	*handle_width(char *str, t_printf *specs, int pm)
 	char	*tmp;
 	char	fill;
 	int		diff;
+	char	*ret;
 
 	diff = specs->width - ft_strlen(str);
 	fill = (specs->iszero == 1 && !specs->isminus) ? '0' : ' ';
@@ -41,11 +42,12 @@ static char	*handle_width(char *str, t_printf *specs, int pm)
 	if (specs->isminus)
 	{
 		if (specs->negative)
-			str = ft_strjoin(" ", str);
-		return (ft_strjoin(str, tmp));
+			str = ft_strjoinfree(" ", str, 2);
+		return (ft_strjoinfree(str, tmp, 2));
 	}
 	else
-		return (ft_strjoin(tmp, str));
+		return (ft_strjoinfree(tmp, str, 1));
+	return (ret);
 }
 
 static char	*add_sign(char *str, t_printf *specs, int pm)
@@ -56,7 +58,7 @@ static char	*add_sign(char *str, t_printf *specs, int pm)
 	i = 0;
 	sign = (specs->negative) ? '-' : '+';
 	if (pm == 1)
-		str = ft_strjoin(" ", str);
+		str = ft_strjoinfree(" ", str, 2);
 	while (str[i + 1] == ' ')
 		i++;
 	str[i] = sign;
@@ -67,6 +69,7 @@ char		*padding(char *str, t_printf *specs)
 {
 	char	sign;
 	int		pm;
+	char	*tmp;
 
 	if (!str)
 		return (NULL);
@@ -78,10 +81,12 @@ char		*padding(char *str, t_printf *specs)
 	}
 	if (specs->width > 0 && specs->width > ft_strlen(str))
 	{
+		tmp = str;
 		str = handle_width(str, specs, pm--);
+		free(tmp);
 		specs->iszero = 0;
 	}
 	if (specs->isplus || specs->negative)
-		str = add_sign(str, specs, pm);
+		add_sign(str, specs, pm);
 	return (str);
 }
