@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/13 12:03:52 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/24 15:37:11 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/25 20:11:16 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 
 # include <stdarg.h>
 # include "../libft/libft.h"
+# include <limits.h>
 # include <stdio.h>
 
 # define BUFFSIZE 20
 # define LARGEST(x, y) (x) >= (y) ? (x) : (y)
-# define SPECIFIERS "sSpdDioOuUxXcCb%"
+# define SPECIFIERS "sSpdDioOuUxXcCb%Z"
+# define VALID_CHARS "sSpdDioOuUxXcCb%lhjzZ"
 # define SP_LEN (ft_strlen(SPECIFIERS))
 
 typedef struct	s_printf
@@ -51,8 +53,8 @@ typedef struct	s_ret
 	int		len;
 }				t_ret;
 
-char			*parse_spec(const char *str, t_printf *specs);
-int				ft_printf(const char *format, ...);
+char			*parse_spec(char *str, t_printf *specs);
+int				ft_printf(char *format, ...);
 char			*convert_s(char *str, t_printf *specs);
 char			*convert_d(va_list ap, t_printf *specs);
 char			*convert_u(va_list ap, t_printf *specs);

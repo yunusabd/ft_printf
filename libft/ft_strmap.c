@@ -6,11 +6,15 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/22 20:45:13 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/03/17 23:01:40 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/25 19:49:55 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+/*
+** Same as ft_strmap, but overwrites the input string with the modified one.
+*/
 
 char	*ft_strmap_p(char *s, char (*f)(char))
 {

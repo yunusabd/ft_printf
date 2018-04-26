@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/09 14:18:55 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/03/19 21:38:05 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/25 21:59:52 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ char					*convert_o(va_list ap, t_printf *specs)
 	long long	nb;
 	char		*ret;
 
+	specs->isplus = 0;
+	specs->negative = 0;
 	if (specs->precision == 0)
 		ret = ft_strdup("");
 	else
@@ -89,6 +91,6 @@ char					*convert_o(va_list ap, t_printf *specs)
 	if ((specs->converter == 'o' || specs->converter == 'O')
 			&& (specs->ishash && (nb != 0 || specs->precision == 0)))
 		ret = ft_strjoinfree("0", ret, 2);
-	ret = padding(ret, specs);
+	ret = (padding(ret, specs));
 	return (ret);
 }

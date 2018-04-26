@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 20:44:26 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/24 17:33:26 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/25 23:18:57 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,13 @@ int		print_arg(va_list ap, t_printf *specs)
 		s = convert_o(ap, specs);
 	else if (specs->converter == 'd' || specs->converter == 'i')
 		s = convert_d(ap, specs);
+	else if (specs->converter == 'D')
+	{
+		specs->isl = 1;
+		specs->ish = 0;
+		specs->ishh = 0;
+		s = convert_d(ap, specs);
+	}
 	else if (specs->converter == 'u' || specs->converter == 'U')
 		s = convert_u(ap, specs);
 	else if (specs->converter == 'c' || specs->converter == 'C')
@@ -49,7 +56,7 @@ int		print_arg(va_list ap, t_printf *specs)
 	}
 	else if (specs->converter == 's' || specs->converter == 'S')
 	{
-		if (specs->converter == 'S')
+		if (specs->converter == 'S' || specs->isl)
 			s = wstring(va_arg(ap, wchar_t*));
 		else
 			s = va_arg(ap, char*);
@@ -57,15 +64,19 @@ int		print_arg(va_list ap, t_printf *specs)
 			s = "(null)";
 		s = convert_s(s, specs);
 	}
+	else if (specs->converter == 'Z')
+		s = padding(ft_strdup("Z"), specs);
 	else
-		s = ft_strdup("no input");
-	printf("s  : %p\n", s);
+	{
+		(specs->width)--;
+		s = padding(ft_strdup(""), specs);
+	}
 	count += ft_putstr(s);
 	free(s);
 	return (count);
 }
 
-int		ft_printf(const char *format, ...)
+int		ft_printf(char *format, ...)
 {
 	va_list		ap;
 	int			i;
@@ -79,7 +90,7 @@ int		ft_printf(const char *format, ...)
 	tmp = ft_strnew(BUFFSIZE);
 	while (*format)
 	{
-		while (i < BUFFSIZE && *format  && *format != '%')
+		while (i < BUFFSIZE && *format && *format != '%')
 		{
 			tmp[i] = *format;
 			i++;
@@ -93,7 +104,8 @@ int		ft_printf(const char *format, ...)
 		if (*format == '%')
 		{
 			ft_memset(&new, 0, sizeof(t_printf));
-			format = parse_spec(format + 1, &new);
+			format = parse_spec(format, &new);
+		//	print_struct(&new);
 			ret += print_arg(ap, &new);
 		}
 	}

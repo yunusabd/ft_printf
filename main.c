@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 23:06:43 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/24 17:37:35 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/26 16:01:35 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,19 @@ void			print_struct(t_printf *specs)
 
 int		main()
 {
-	int res = 0;;
+	int res = 0;
+	int re2 = 0;
 
-	//res = ft_printf("%20.15d\n", 54321);;
-	//printf("\nResult: %d\n", res);
-	printf("\nResult: %d\n", ft_printf("[%-5d]\n", -42));
+	res = ft_printf("%15.4d", -424242);
+	printf("\nResult: %d\n", res);
+//	re2 = printf("%+c", 48);
+	re2 = printf("%15.4d", -424242);
+	printf("\nResult: %d\n", re2);
+/*	printf("\nResult: %d\n", ft_printf("[%5p]\n", 0));
+	ft_printf("%");
+	printf("\n");
+	printf("%");
 	while (1);
+*/
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/09 14:18:55 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/24 17:29:13 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/25 22:25:42 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,18 @@ char			*convert_p(va_list ap, t_printf *specs)
 
 	nb = va_arg(ap, intmax_t);
 	ret = ft_itoa_base_u(nb, 16);
-	ret = ft_strjoinfree("0x", ret, 2);
+	if (specs->iszero == 0)
+	{
+		ret = ft_strjoinfree("0x", ret, 2);
+		if (ft_strlen(ret) < specs->width)
+			ret = padding(ret, specs);
+	}
+	if (specs->iszero == 1)
+	{
+		if (ft_strlen(ret) < (specs->width -= 2))
+			ret = padding(ret, specs);
+		ret = ft_strjoinfree("0x", ret, 2);
+	}
 	ret = ft_strmap_p(ret, ft_tolowercase);
 	return (ret);
 }
@@ -123,11 +134,11 @@ char			*convert_d(va_list ap, t_printf *specs)
 		free(ret);
 		return (padding(ft_strdup(""), specs));
 	}
-	printf("\nret1: %p\n", ret);
 	ret = padding(ret, specs);
+	if (specs->iszero == 1 && specs->isspace == 1 && specs->negative != 1)
+		ret[0] = ' ';
 	if (!specs->negative && !specs->isplus && specs->isspace
 			&& ft_atoi(ret) > 0)
 		ret = ft_strjoinfree((ret[0] != ' ') ? " " : "", ret, 2);
-	printf("ret2: %p\n", ret);
 	return (ret);
 }
