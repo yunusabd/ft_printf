@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/13 12:03:52 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/25 20:11:16 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/26 22:27:58 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdarg.h>
 # include "../libft/libft.h"
 # include <limits.h>
+# include <locale.h>
 # include <stdio.h>
 
 # define BUFFSIZE 20

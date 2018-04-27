@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/09 14:18:55 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/25 21:59:52 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/27 19:33:08 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ char					*convert_u(va_list ap, t_printf *specs)
 	specs->negative = 0;
 	specs->isplus = 0;
 	ret = ft_itoa_base_u(nb, 10);
+	if (specs->precision == 0)
+		ret = ft_strdup("");
 	ret = padding(ret, specs);
 	return (ret);
 }
@@ -53,9 +55,15 @@ char					*convert_x(va_list ap, t_printf *specs)
 	specs->negative = 0;
 	specs->isplus = 0;
 	ret = ft_itoa_base_u(nb, 16);
-	if (specs->converter == 'x' || specs->converter == 'X')
+	if (specs->ishash && nb != 0)
 	{
-		if (specs->ishash && nb != 0)
+		if (!specs->iszero)
+			ret = ft_strjoinfree("0X", ret, 2);
+		else
+			specs->width -= 2;
+		if (specs->width != -1 || specs->precision != -1)
+			ret = padding(ret, specs);
+		if (specs->iszero)
 			ret = ft_strjoinfree("0X", ret, 2);
 	}
 	if (specs->precision == 0)
@@ -81,15 +89,20 @@ char					*convert_o(va_list ap, t_printf *specs)
 
 	specs->isplus = 0;
 	specs->negative = 0;
-	if (specs->precision == 0)
-		ret = ft_strdup("");
-	else
+	nb = convert_len(ap, specs);
+	ret = ft_itoa_base_u(nb, 8);
+	if (specs->ishash && nb != 0)
 	{
-		nb = convert_len(ap, specs);
-		ret = ft_itoa_base_u(nb, 8);
+		while (specs->precision <= ft_strlen(ret))
+			specs->precision++;
+	}
+	if (specs->precision == 0 && !specs->ishash)
+	{
+		free(ret);
+		ret = ft_strdup("");
 	}
 	if ((specs->converter == 'o' || specs->converter == 'O')
-			&& (specs->ishash && (nb != 0 || specs->precision == 0)))
+			&& (specs->ishash && nb != 0))
 		ret = ft_strjoinfree("0", ret, 2);
 	ret = (padding(ret, specs));
 	return (ret);

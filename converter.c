@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/09 14:18:55 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/25 22:25:42 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/27 19:22:33 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@ char			*convert_s(char *str, t_printf *specs)
 	char	fill;
 	int		len;
 
+	if (ft_strlen(str) > specs->precision && (specs->converter == 'S' || specs->isl == 1) && specs->precision)
+	{
+		while ((specs->converter == 'S' || specs->isl == 1) &&
+				(*(str + specs->precision) & 0xC0) == 0x80)
+			specs->precision -= 1;
+		ft_strclr(str + specs->precision);
+	}	
 	if (specs->precision == 0)
 		str = ft_strdup("");
 	else if (specs->precision > 0 && specs->precision < ft_strlen(str))
@@ -52,11 +59,13 @@ char			*convert_c(va_list ap, t_printf *specs)
 		c = va_arg(ap, wchar_t);
 		ret = handle_unicode(c);
 		specs->isl = 1;
+		specs->precision = -1;
 	}
 	else
 	{
 		c = va_arg(ap, int);
 		ret = ft_strnew(1);
+		specs->precision = -1;
 		ret[0] = c;
 	}
 	if (c == 0)
@@ -66,8 +75,8 @@ char			*convert_c(va_list ap, t_printf *specs)
 }
 
 /*
-** Converts the length of d and i.
-*/
+ ** Converts the length of d and i.
+ */
 
 static intmax_t	convert_len(va_list ap, t_printf *specs)
 {
@@ -97,14 +106,31 @@ char			*convert_p(va_list ap, t_printf *specs)
 	intmax_t		nb;
 
 	nb = va_arg(ap, intmax_t);
-	ret = ft_itoa_base_u(nb, 16);
-	if (specs->iszero == 0)
+	if (specs->precision == 0)
+		ret = ft_strdup("");
+	else
+		ret = ft_itoa_base_u(nb, 16);
+	specs->isplus = 0;
+	if (ft_strlen(ret) < specs->width || ft_strlen(ret) < specs->precision)
 	{
-		ret = ft_strjoinfree("0x", ret, 2);
-		if (ft_strlen(ret) < specs->width)
+		if (specs->iszero)
+		{
+			specs->width -= 2;
 			ret = padding(ret, specs);
+			ret = ft_strjoinfree("0x", ret, 2);
+		}
+		else if (specs->width == -1 || specs->precision > specs->width)
+		{
+			ret = padding(ret, specs);
+			ret = ft_strjoinfree("0x", ret, 2);
+		}
+		else
+		{
+			ret = ft_strjoinfree("0x", ret, 2);
+			ret = padding(ret, specs);
+		}
 	}
-	if (specs->iszero == 1)
+	else
 	{
 		if (ft_strlen(ret) < (specs->width -= 2))
 			ret = padding(ret, specs);
@@ -127,6 +153,8 @@ char			*convert_d(va_list ap, t_printf *specs)
 			&& (nb == 2147483648 || nb == -2147483648))
 		return (ft_strdup("-2147483648"));
 	ret = ft_itoa_base(nb, 10);
+	if (specs->width > 0 && specs->precision > 0 && !specs->isminus)
+		specs->iszero = 0;
 	if (ft_strchr(ret, '-'))
 		specs->negative = 0;
 	if (specs->precision == 0 && nb == 0)

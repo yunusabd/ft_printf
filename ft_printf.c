@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 20:44:26 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/25 23:18:57 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/27 15:28:59 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ int		print_arg(va_list ap, t_printf *specs)
 	if (!specs->converter)
 		s = NULL;
 	else if (specs->converter == '%')
+	{
+		specs->precision = -1;
 		s = padding(ft_strdup("%\0"), specs);
+	}
 	else if (specs->converter == 'p')
 		s = convert_p(ap, specs);
 	else if (specs->converter == 'x' || specs->converter == 'X')
@@ -84,6 +87,7 @@ int		ft_printf(char *format, ...)
 	int			ret;
 	char		*tmp;
 
+	setlocale(LC_ALL, "");
 	va_start(ap, format);
 	ret = 0;
 	i = 0;
