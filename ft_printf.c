@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 20:44:26 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/27 15:28:59 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/30 15:09:53 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int		print_arg(va_list ap, t_printf *specs)
 	else if (specs->converter == '%')
 	{
 		specs->precision = -1;
+		specs->isplus = 0;
 		s = padding(ft_strdup("%\0"), specs);
 	}
 	else if (specs->converter == 'p')
@@ -62,9 +63,9 @@ int		print_arg(va_list ap, t_printf *specs)
 		if (specs->converter == 'S' || specs->isl)
 			s = wstring(va_arg(ap, wchar_t*));
 		else
-			s = va_arg(ap, char*);
+			s = ft_strdup(va_arg(ap, char*));
 		if (!s)
-			s = "(null)";
+			s = ft_strdup("(null)");
 		s = convert_s(s, specs);
 	}
 	else if (specs->converter == 'Z')
@@ -109,7 +110,6 @@ int		ft_printf(char *format, ...)
 		{
 			ft_memset(&new, 0, sizeof(t_printf));
 			format = parse_spec(format, &new);
-		//	print_struct(&new);
 			ret += print_arg(ap, &new);
 		}
 	}

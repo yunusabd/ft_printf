@@ -6,36 +6,33 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/16 20:21:28 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/24 16:33:49 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/28 17:31:34 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
 char	*ft_itoa_base(long long value, int base)
 {
 	char	*buff;
-	char	*digits;
 	int		len;
 	int		tmp;
 	int		minus;
 
 	if (base < 2 || base > 16)
 		return (NULL);
-	minus = (value < 0) ? 1 : 0;
+	minus = (value < 0 && base == 10) ? 1 : 0;
 	len = ft_numlen_ll(value, base);
 	tmp = value % base;
-	tmp = ABS(tmp);
+	tmp *= (tmp < 0) ? -1 : 1;
 	value /= base;
-	value = ABS(value);
+	value *= (value < 0) ? -1 : 1;
 	if (!(buff = ft_strnew(len)))
 		return (NULL);
-	digits = "0123456789ABCDEF";
-	buff[len - 1] = digits[tmp];
+	buff[len - 1] = "0123456789ABCDEF"[tmp];
 	while (--len)
 	{
-		buff[len - 1] = digits[value % base];
+		buff[len - 1] = "0123456789ABCDEF"[value % base];
 		value /= base;
 	}
 	if (minus)

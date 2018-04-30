@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/08 16:29:14 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/25 16:44:48 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/30 15:20:29 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,19 @@ static char	*set_len(char *fstr, int *len_conv, int offset)
 
 static char	*get_len(char *fstr, t_printf *specs)
 {
-	if (!fstr || !ft_isalpha(*fstr))
+	if (!fstr)
 		return (fstr);
-	if (ft_strncmp(fstr, "ll", 2) == 0)
-		return (set_len(fstr, &specs->isll, 2));
-	else if (ft_strncmp(fstr, "hh", 2) == 0)
-		return (set_len(fstr, &specs->ishh, 2));
-	else if (ft_strncmp(fstr, "l", 1) == 0)
+	if (ft_strstr(fstr, "ll") && (specs->isll = 1))
+		return (fstr + 2);
+	else if (ft_strstr(fstr, "hh") && (specs->ishh = 1))
+		return (fstr + 2);
+	else if (ft_strstr(fstr, "l"))
 		return (set_len(fstr, &specs->isl, 1));
-	else if (ft_strncmp(fstr, "h", 1) == 0)
+	else if (ft_strstr(fstr, "h"))
 		return (set_len(fstr, &specs->ish, 1));
-	else if (ft_strncmp(fstr, "j", 1) == 0)
+	else if (ft_strstr(fstr, "j"))
 		return (set_len(fstr, &specs->isj, 1));
-	else if (ft_strncmp(fstr, "z", 1) == 0)
+	else if (ft_strstr(fstr, "z"))
 		return (set_len(fstr, &specs->isz, 1));
 	else
 		return (fstr);
@@ -106,10 +106,6 @@ static int	get_precision(t_printf *specs, char *spec_pos)
 	return (0);
 }
 
-/*
-** TODO If no converter is found, print the characters
-*/
-
 char		*parse_spec(char *str, t_printf *specs)
 {
 	char		*pos;
@@ -119,6 +115,9 @@ char		*parse_spec(char *str, t_printf *specs)
 	pos = NULL;
 	if ((pos = find_specifier(str, specs)))
 	{
+		while ((ft_strchr(VALID_CHARS, *pos)) &&
+					!ft_strchr(SPECIFIERS,*pos))
+				pos++;
 		if (ft_strchr(SPECIFIERS, *pos))
 			specs->converter = *pos;
 		else
@@ -132,7 +131,6 @@ char		*parse_spec(char *str, t_printf *specs)
 			specs->precision = -1;
 		fstr = get_len(fstr, specs);
 		free(tmp);
-		//print_struct(specs);
 		if (specs->converter == '0')
 			return (pos);
 		return (pos + 1);

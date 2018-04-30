@@ -6,13 +6,12 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 23:06:43 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/27 19:21:44 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/30 15:46:02 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_printf.h"
 #include <wchar.h>
-
 
 void			print_struct(t_printf *specs)
 {
@@ -36,19 +35,22 @@ void			print_struct(t_printf *specs)
 
 int		main()
 {
-	int res = 0;
-	int re2 = 0;
+	ft_printf("[%-10.5o]", 2500);
+	printf("\n------------\n");
 
-	res = ft_printf("{%#.5x}", 1);
+	printf("[%-10.5o]", 2500);
+	printf("\n------------\n");
+/*
+	res = ft_printf("%x\n", "this is a string.");
 	printf("\nResult: %d\n", res);
-//	re2 = printf("%+c", 48);
-	re2 = printf("{%#.5x}", 1);
+	//	re2 = printf("%+c", 48);
+	re2 = printf("%x\n", "this is a string.");
 	printf("\nResult: %d\n", re2);
-/*	printf("\nResult: %d\n", ft_printf("[%5p]\n", 0));
-	ft_printf("%");
-	printf("\n");
-	printf("%");
-	while (1);
+		printf("\nResult: %d\n", ft_printf("[%5p]\n", 0));
+		ft_printf("%");
+		printf("\n");
+		printf("%");
+		while (1);
 */
 	return (0);
 }

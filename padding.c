@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 21:10:54 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/27 19:20:43 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/30 15:47:44 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static char	*handle_width(char *str, t_printf *specs)
 	char	*tmp;
 	char	fill;
 	int		diff;
-	char	*ret;
 
 	diff = specs->width - ft_strlen(str);
 	fill = (specs->iszero == 1 && !specs->isminus) ? '0' : ' ';
@@ -64,22 +63,22 @@ static char	*add_sign(char *str, t_printf *specs)
 
 char		*padding(char *str, t_printf *specs)
 {
-	char	sign;
-
 	if (!str)
 		return (NULL);
-	if (specs->width > specs->precision && ft_strlen(str) < specs->precision &&
-			specs->isminus == 1 && specs->precision > 0)
+/*	if (specs->width > specs->precision &&
+			(int)ft_strlen(str) < specs->precision &&
+			specs->isminus == 1 && specs->precision > 0 && ft_atoi(str) != 0)
 		specs->width++;
-	if (specs->precision > 0 && specs->precision > ft_strlen(str))
+		*/
+	if (specs->precision > 0 && specs->precision > (int)ft_strlen(str))
 		str = handle_precision(str, specs);
-	if (specs->width > 0 && specs->width > ft_strlen(str))
+	if (specs->width > 0 && specs->width > (int)ft_strlen(str))
 		str = handle_width(str, specs);
 	if (specs->isplus || specs->negative)
 		str = add_sign(str, specs);
 	if (specs->precision > 0 && specs->width > 0 &&
-			specs->width > specs->precision && ft_strlen(str) >= specs->width &&
-			specs->isminus)
-		str[ft_strlen(str) - 1] = '\0';
+			specs->width > specs->precision &&
+			(int)ft_strlen(str) > specs->width && specs->isminus)
+		str[(int)ft_strlen(str) - 1] = '\0';
 	return (str);
 }

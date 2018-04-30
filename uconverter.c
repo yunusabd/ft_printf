@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/09 14:18:55 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/27 19:33:08 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/30 15:49:38 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,32 @@ char					*convert_u(va_list ap, t_printf *specs)
 	specs->negative = 0;
 	specs->isplus = 0;
 	ret = ft_itoa_base_u(nb, 10);
-	if (specs->precision == 0)
+	if (specs->precision == 0 && nb == 0)
 		ret = ft_strdup("");
+	if (specs->precision > -1 && specs->width > -1)
+		specs->iszero = 0;
 	ret = padding(ret, specs);
+	return (ret);
+}
+
+static char				*handle_hash(char *ret, t_printf *specs)
+{
+	if (!specs->iszero && specs->precision == -1)
+		return (ft_strjoinfree("0X", ret, 2));
+	else
+	{
+		if (specs->width != -1 || specs->precision != -1)
+		{
+			if ((int)(ft_strlen(ret) > specs->precision))
+			{
+				ret = ft_strjoinfree("0X", ret, 2);
+				return (padding(ret, specs));
+			}
+			specs->width -= 2;
+			ret = padding(ret, specs);
+		}
+		return (ft_strjoinfree("0X", ret, 2));
+	}
 	return (ret);
 }
 
@@ -54,25 +77,18 @@ char					*convert_x(va_list ap, t_printf *specs)
 	nb = convert_len(ap, specs);
 	specs->negative = 0;
 	specs->isplus = 0;
+	if (specs->precision >= 0)
+	specs->iszero = 0;
 	ret = ft_itoa_base_u(nb, 16);
 	if (specs->ishash && nb != 0)
-	{
-		if (!specs->iszero)
-			ret = ft_strjoinfree("0X", ret, 2);
-		else
-			specs->width -= 2;
-		if (specs->width != -1 || specs->precision != -1)
-			ret = padding(ret, specs);
-		if (specs->iszero)
-			ret = ft_strjoinfree("0X", ret, 2);
-	}
-	if (specs->precision == 0)
+		ret = handle_hash(ret, specs);
+	if (specs->precision == 0 && nb == 0)
 	{
 		free(ret);
 		ret = ft_strdup("");
 	}
 	ptr = padding(ret, specs);
-	if (specs->ishash && ptr[1] == '0')
+	if (specs->ishash && ptr[1] == '0' && ft_strchr(ptr, 'X'))
 	{
 		*(ft_strchr(ptr, 'X')) = '0';
 		ptr[1] = 'X';
@@ -91,12 +107,9 @@ char					*convert_o(va_list ap, t_printf *specs)
 	specs->negative = 0;
 	nb = convert_len(ap, specs);
 	ret = ft_itoa_base_u(nb, 8);
-	if (specs->ishash && nb != 0)
-	{
-		while (specs->precision <= ft_strlen(ret))
-			specs->precision++;
-	}
-	if (specs->precision == 0 && !specs->ishash)
+	if (specs->precision > -1 && specs->width > -1)
+		specs->iszero = 0;
+	if (specs->precision == 0 && !specs->ishash && nb == 0)
 	{
 		free(ret);
 		ret = ft_strdup("");

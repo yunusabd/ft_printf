@@ -6,13 +6,26 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 16:32:17 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/03/18 15:35:54 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/28 17:49:39 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoinfree(char *s1, char *s2, int del)
+static void		free_str(char *s1, char *s2, int del)
+{
+	if (del == 1)
+		free(s1);
+	else if (del == 2)
+		free(s2);
+	else
+	{
+		free(s1);
+		free(s2);
+	}
+}
+
+char			*ft_strjoinfree(char *s1, char *s2, int del)
 {
 	char	*new;
 	int		i;
@@ -34,14 +47,6 @@ char	*ft_strjoinfree(char *s1, char *s2, int del)
 			new[i + len1] = s2[i];
 		i++;
 	}
-	if (del == 1)
-		free(s1);
-	else if (del == 2)
-		free(s2);
-	else
-	{
-		free(s1);
-		free(s2);
-	}
+	free_str(s1, s2, del);
 	return (new);
 }

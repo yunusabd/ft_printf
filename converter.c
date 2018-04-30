@@ -6,45 +6,45 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/09 14:18:55 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/27 19:22:33 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/28 16:22:50 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_printf.h"
 
-char			*convert_s(char *str, t_printf *specs)
+static void		truncate_wstr(char *str, t_printf *specs)
 {
-	char	*ret;
-	char	*tmp;
-	char	fill;
-	int		len;
-
-	if (ft_strlen(str) > specs->precision && (specs->converter == 'S' || specs->isl == 1) && specs->precision)
+	if ((specs->converter == 'S' || specs->isl == 1) && specs->precision)
 	{
 		while ((specs->converter == 'S' || specs->isl == 1) &&
 				(*(str + specs->precision) & 0xC0) == 0x80)
 			specs->precision -= 1;
 		ft_strclr(str + specs->precision);
-	}	
+	}
+}
+
+char			*convert_s(char *str, t_printf *specs)
+{
+	char	*tmp;
+	int		len;
+
+	if ((int)ft_strlen(str) > specs->precision && specs->precision > 0)
+		truncate_wstr(str, specs);
 	if (specs->precision == 0)
 		str = ft_strdup("");
-	else if (specs->precision > 0 && specs->precision < ft_strlen(str))
+	else if (specs->precision > 0 && specs->precision < (int)ft_strlen(str))
 		str = ft_strndup(str, specs->precision);
-	else
-		str = ft_strdup(str);
-	if (specs->width > 0 && specs->width > ft_strlen(str))
+	if (specs->width > 0 && specs->width > (int)ft_strlen(str))
 	{
 		len = specs->width - ft_strlen(str);
 		len = (specs->negative) ? (len - 1) : (len);
 		tmp = ft_strnew(len);
-		fill = (specs->iszero == 1 && !specs->isminus) ? '0' : ' ';
-		tmp = ft_memset((void*)tmp, fill, len);
+		tmp = ft_memset((void*)tmp, (specs->iszero &&
+					!specs->isminus) ? '0' : ' ', len);
 		if (specs->isminus)
-			ret = ft_strjoinfree(str, tmp, 2);
+			str = ft_strjoinfree(str, tmp, 3);
 		else
-			ret = ft_strjoinfree(tmp, str, 1);
-		str = ft_strdup(ret);
-		free(ret);
+			str = ft_strjoinfree(tmp, str, 3);
 	}
 	return (str);
 }
@@ -75,8 +75,8 @@ char			*convert_c(va_list ap, t_printf *specs)
 }
 
 /*
- ** Converts the length of d and i.
- */
+** Converts the length of d and i.
+*/
 
 static intmax_t	convert_len(va_list ap, t_printf *specs)
 {
@@ -100,6 +100,27 @@ static intmax_t	convert_len(va_list ap, t_printf *specs)
 	return (nb);
 }
 
+static char		*p_padding(char *ret, t_printf *specs)
+{
+	if (specs->iszero)
+	{
+		specs->width -= 2;
+		ret = padding(ret, specs);
+		ret = ft_strjoinfree("0x", ret, 2);
+	}
+	else if (specs->width == -1 || specs->precision > specs->width)
+	{
+		ret = padding(ret, specs);
+		ret = ft_strjoinfree("0x", ret, 2);
+	}
+	else
+	{
+		ret = ft_strjoinfree("0x", ret, 2);
+		ret = padding(ret, specs);
+	}
+	return (ret);
+}
+
 char			*convert_p(va_list ap, t_printf *specs)
 {
 	char			*ret;
@@ -111,28 +132,12 @@ char			*convert_p(va_list ap, t_printf *specs)
 	else
 		ret = ft_itoa_base_u(nb, 16);
 	specs->isplus = 0;
-	if (ft_strlen(ret) < specs->width || ft_strlen(ret) < specs->precision)
-	{
-		if (specs->iszero)
-		{
-			specs->width -= 2;
-			ret = padding(ret, specs);
-			ret = ft_strjoinfree("0x", ret, 2);
-		}
-		else if (specs->width == -1 || specs->precision > specs->width)
-		{
-			ret = padding(ret, specs);
-			ret = ft_strjoinfree("0x", ret, 2);
-		}
-		else
-		{
-			ret = ft_strjoinfree("0x", ret, 2);
-			ret = padding(ret, specs);
-		}
-	}
+	if ((int)ft_strlen(ret) < specs->width ||
+			(int)ft_strlen(ret) < specs->precision)
+		ret = p_padding(ret, specs);
 	else
 	{
-		if (ft_strlen(ret) < (specs->width -= 2))
+		if ((int)ft_strlen(ret) < (specs->width -= 2))
 			ret = padding(ret, specs);
 		ret = ft_strjoinfree("0x", ret, 2);
 	}
@@ -144,29 +149,27 @@ char			*convert_d(va_list ap, t_printf *specs)
 {
 	char			*ret;
 	intmax_t		nb;
-	char			*tmp;
 
 	nb = convert_len(ap, specs);
+	if (!(specs->isl || specs->isll || specs->isj) && nb == -2147483648)
+		return (ft_strdup("-2147483648"));
 	specs->negative = (nb < 0) ? 1 : 0;
 	nb < 0 ? nb = -nb : 0;
-	if (!(specs->isl || specs->isll || specs->isj)
-			&& (nb == 2147483648 || nb == -2147483648))
-		return (ft_strdup("-2147483648"));
 	ret = ft_itoa_base(nb, 10);
 	if (specs->width > 0 && specs->precision > 0 && !specs->isminus)
 		specs->iszero = 0;
 	if (ft_strchr(ret, '-'))
 		specs->negative = 0;
+	ret = padding(ret, specs);
 	if (specs->precision == 0 && nb == 0)
 	{
 		free(ret);
-		return (padding(ft_strdup(""), specs));
+		ret = (padding(ft_strdup(""), specs));
 	}
-	ret = padding(ret, specs);
 	if (specs->iszero == 1 && specs->isspace == 1 && specs->negative != 1)
 		ret[0] = ' ';
-	if (!specs->negative && !specs->isplus && specs->isspace
-			&& ft_atoi(ret) > 0)
+	if (!specs->negative && !specs->isplus &&
+			specs->isspace && ft_atoi(ret) >= 0)
 		ret = ft_strjoinfree((ret[0] != ' ') ? " " : "", ret, 2);
 	return (ret);
 }

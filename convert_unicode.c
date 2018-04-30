@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/23 17:11:21 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/24 15:46:53 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/28 15:45:00 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*wstring(wchar_t *s)
 		return (NULL);
 	while (*s)
 	{
-		ret = ft_strjoinfree(ret, handle_unicode(*s), 2);
+		ret = ft_strjoinfree(ret, handle_unicode(*s), 3);
 		s++;
 	}
 	return (ret);

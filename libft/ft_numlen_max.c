@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/11 21:57:31 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/03/14 12:36:04 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/28 17:06:59 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 */
 
 #include "libft.h"
+
 int		ft_numlen_max(intmax_t nb, int base)
 {
 	int	len;
