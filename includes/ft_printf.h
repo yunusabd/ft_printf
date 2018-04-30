@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/13 12:03:52 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/26 22:27:58 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/30 18:20:07 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 
 # define BUFFSIZE 20
 # define LARGEST(x, y) (x) >= (y) ? (x) : (y)
-# define SPECIFIERS "sSpdDioOuUxXcCb%Z"
-# define VALID_CHARS "sSpdDioOuUxXcCb%lhjzZ"
+# define SPECIFIERS "sSpdDioOuUxXcCb%"
+# define VALID_CHARS "sSpdDioOuUxXcCb%lhjz"
 # define SP_LEN (ft_strlen(SPECIFIERS))
 
 typedef struct	s_printf
@@ -44,7 +44,6 @@ typedef struct	s_printf
 	int		isz;
 	char	converter;
 	int		negative;
-	int		printed;
 
 }				t_printf;
 
@@ -66,5 +65,9 @@ char			*convert_p(va_list ap, t_printf *specs);
 char			*padding(char *str, t_printf *specs);
 char			*handle_unicode(wchar_t c);
 char			*wstring(wchar_t *s);
+char			*init_d(va_list ap, t_printf *specs);
+char			*init_s(va_list ap, t_printf *specs);
+char			*handle_percent(t_printf *specs);
+int				empty_string(char *s, t_printf *specs, int count);
 
 #endif

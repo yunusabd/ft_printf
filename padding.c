@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 21:10:54 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/30 15:47:44 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/30 17:07:32 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,6 @@ char		*padding(char *str, t_printf *specs)
 {
 	if (!str)
 		return (NULL);
-/*	if (specs->width > specs->precision &&
-			(int)ft_strlen(str) < specs->precision &&
-			specs->isminus == 1 && specs->precision > 0 && ft_atoi(str) != 0)
-		specs->width++;
-		*/
 	if (specs->precision > 0 && specs->precision > (int)ft_strlen(str))
 		str = handle_precision(str, specs);
 	if (specs->width > 0 && specs->width > (int)ft_strlen(str))

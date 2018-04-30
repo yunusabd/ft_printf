@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 23:06:43 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/30 15:46:02 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/30 18:09:46 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ void			print_struct(t_printf *specs)
 
 int		main()
 {
-	ft_printf("[%-10.5o]", 2500);
+	printf("Return: %d\n", ft_printf(""));
 	printf("\n------------\n");
 
-	printf("[%-10.5o]", 2500);
+	printf("");
 	printf("\n------------\n");
 /*
 	res = ft_printf("%x\n", "this is a string.");

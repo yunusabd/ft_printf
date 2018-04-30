@@ -1,7 +1,8 @@
 NAME = libftprintf.a
 
 SRCS_PATH =  
-SRCS = ft_printf.c parser.c converter.c uconverter.c padding.c convert_unicode.c
+SRCS = ft_printf.c parser.c converter.c uconverter.c padding.c \
+	   convert_unicode.c set_conv.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -26,7 +27,7 @@ $(NAME): libftcomp  $(OBJS) $(LIB)
 #	@echo "\033[31;3m\nCompiling Done !\033[0m"
 
 $(OBJS): $(OBJS_PATH) $(SRCS) $(INCLUDES_PATH)
-	@gcc -c $(SRCS)
+	@gcc -c $(SRCS) $(CFLAGS)
 
 $(OBJS_PATH):
 	@mkdir $(OBJS_PATH) 2> /dev/null || true

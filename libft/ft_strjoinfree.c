@@ -6,12 +6,12 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 16:32:17 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/28 17:49:39 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/30 16:57:25 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
+#include <stdio.h>
 static void		free_str(char *s1, char *s2, int del)
 {
 	if (del == 1)
@@ -32,7 +32,7 @@ char			*ft_strjoinfree(char *s1, char *s2, int del)
 	int		len1;
 	int		len;
 
-	if (!(s1 && s2))
+	if (s1 == NULL || s2 == NULL)
 		return (NULL);
 	len1 = ft_strlen(s1);
 	len = len1 + ft_strlen(s2);

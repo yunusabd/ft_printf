@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 20:44:26 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/30 15:09:53 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/30 18:20:22 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,10 @@
 
 #include <wchar.h>
 
-int		print_arg(va_list ap, t_printf *specs)
+int			print_arg(va_list ap, t_printf *specs, char *s, int count)
 {
-	char			*s;
-	int				count;
-
-	count = 0;
-	if (!specs->converter)
-		s = NULL;
-	else if (specs->converter == '%')
-	{
-		specs->precision = -1;
-		specs->isplus = 0;
-		s = padding(ft_strdup("%\0"), specs);
-	}
+	if (specs->converter == '%')
+		s = handle_percent(specs);
 	else if (specs->converter == 'p')
 		s = convert_p(ap, specs);
 	else if (specs->converter == 'x' || specs->converter == 'X')
@@ -35,52 +25,25 @@ int		print_arg(va_list ap, t_printf *specs)
 	else if (specs->converter == 'o' || specs->converter == 'O')
 		s = convert_o(ap, specs);
 	else if (specs->converter == 'd' || specs->converter == 'i')
-		s = convert_d(ap, specs);
-	else if (specs->converter == 'D')
-	{
-		specs->isl = 1;
-		specs->ish = 0;
-		specs->ishh = 0;
-		s = convert_d(ap, specs);
-	}
+		s = init_d(ap, specs);
 	else if (specs->converter == 'u' || specs->converter == 'U')
 		s = convert_u(ap, specs);
 	else if (specs->converter == 'c' || specs->converter == 'C')
 	{
 		s = convert_c(ap, specs);
 		if (s == NULL)
-		{
-			specs->precision = 0;
-			specs->width--;
-			s = padding(ft_strdup(""), specs);
-			count += ft_putstr(s);
-			ft_putchar('\0');
-			return (count + 1);
-		}
+			return (empty_string(s, specs, count));
 	}
 	else if (specs->converter == 's' || specs->converter == 'S')
-	{
-		if (specs->converter == 'S' || specs->isl)
-			s = wstring(va_arg(ap, wchar_t*));
-		else
-			s = ft_strdup(va_arg(ap, char*));
-		if (!s)
-			s = ft_strdup("(null)");
-		s = convert_s(s, specs);
-	}
-	else if (specs->converter == 'Z')
-		s = padding(ft_strdup("Z"), specs);
-	else
-	{
-		(specs->width)--;
+		s = init_s(ap, specs);
+	else if ((specs->width)--)
 		s = padding(ft_strdup(""), specs);
-	}
 	count += ft_putstr(s);
 	free(s);
 	return (count);
 }
 
-int		ft_printf(char *format, ...)
+int			ft_printf(char *format, ...)
 {
 	va_list		ap;
 	int			i;
@@ -110,13 +73,11 @@ int		ft_printf(char *format, ...)
 		{
 			ft_memset(&new, 0, sizeof(t_printf));
 			format = parse_spec(format, &new);
-			ret += print_arg(ap, &new);
+			ret += print_arg(ap, &new, NULL, 0);
 		}
 	}
 	if (i)
 		write(1, tmp, i);
-	free(tmp);
-	va_end(ap);
 	return (ret);
 }
 

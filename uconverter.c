@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/09 14:18:55 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/30 15:49:38 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/04/30 18:19:45 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static char				*handle_hash(char *ret, t_printf *specs)
 	{
 		if (specs->width != -1 || specs->precision != -1)
 		{
-			if ((int)(ft_strlen(ret) > specs->precision))
+			if ((int)ft_strlen(ret) > specs->precision)
 			{
 				ret = ft_strjoinfree("0X", ret, 2);
 				return (padding(ret, specs));
