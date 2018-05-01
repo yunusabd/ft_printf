@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/09 14:18:55 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/30 18:19:45 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/05/01 12:53:11 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,12 @@ char					*convert_x(va_list ap, t_printf *specs)
 {
 	long long	nb;
 	char		*ret;
-	char		*ptr;
 
 	nb = convert_len(ap, specs);
 	specs->negative = 0;
 	specs->isplus = 0;
 	if (specs->precision >= 0)
-	specs->iszero = 0;
+		specs->iszero = 0;
 	ret = ft_itoa_base_u(nb, 16);
 	if (specs->ishash && nb != 0)
 		ret = handle_hash(ret, specs);
@@ -87,15 +86,15 @@ char					*convert_x(va_list ap, t_printf *specs)
 		free(ret);
 		ret = ft_strdup("");
 	}
-	ptr = padding(ret, specs);
-	if (specs->ishash && ptr[1] == '0' && ft_strchr(ptr, 'X'))
+	ret = padding(ret, specs);
+	if (specs->ishash && ret[1] == '0' && ft_strchr(ret, 'X'))
 	{
-		*(ft_strchr(ptr, 'X')) = '0';
-		ptr[1] = 'X';
+		*(ft_strchr(ret, 'X')) = '0';
+		ret[1] = 'X';
 	}
 	if (specs->converter == 'x')
-		return (ft_strmap_p(ptr, ft_tolowercase));
-	return (ptr);
+		return (ft_strmap_p(ret, ft_tolowercase));
+	return (ret);
 }
 
 char					*convert_o(va_list ap, t_printf *specs)

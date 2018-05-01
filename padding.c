@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/13 21:10:54 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/30 17:07:32 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/05/01 13:10:06 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static char	*handle_precision(char *str, t_printf *specs)
 {
 	char	*tmp;
 	int		diff;
+	char	fill;
 
 	if (specs->precision == 0)
 		return (ft_strdup(""));
@@ -23,7 +24,9 @@ static char	*handle_precision(char *str, t_printf *specs)
 	if ((specs->isplus || specs->negative) && specs->negative)
 		specs->isplus = 0;
 	tmp = ft_strnew(diff);
-	tmp = ft_memset((void*)tmp, '0', diff);
+	fill = (specs->iszero ||
+			ft_strchr(SPECIFIERS, specs->converter)) ? '0' : ' ';
+	tmp = ft_memset((void*)tmp, fill, diff);
 	return (ft_strjoinfree(tmp, str, 3));
 }
 

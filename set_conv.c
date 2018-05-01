@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/30 17:26:50 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/30 18:19:55 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/05/01 13:37:51 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,13 @@ char		*init_s(va_list ap, t_printf *specs)
 {
 	char	*s;
 
-	if (specs->converter == 'S' || specs->isl)
+	if (!ft_strchr(SPECIFIERS, specs->converter))
+	{
+		if (specs->width >= 0)
+			specs->precision = -1;
+		s = ft_strdup(&(specs->converter));
+	}
+	else if (specs->converter == 'S' || specs->isl)
 		s = wstring(va_arg(ap, wchar_t*));
 	else
 		s = ft_strdup(va_arg(ap, char*));
@@ -47,22 +53,20 @@ char		*handle_percent(t_printf *specs)
 	return (padding(ft_strdup("%\0"), specs));
 }
 
-int			empty_string(char *s, t_printf *specs, int count)
-{	        
-	if (s == NULL)
+int			empty_string(t_printf *specs, int count)
+{
+	char	*s;
+
+	specs->precision = 0;
+	specs->width--;
+	s = padding(ft_strdup(""), specs);
+	if (specs->isminus)
 	{
-		specs->precision = 0;
-		specs->width--;
-		s = padding(ft_strdup(""), specs);
-		if (specs->isminus)
-		{
-			ft_putchar('\0');
-			count += ft_putstr(s);
-			return (count + 1);
-		}
-		count += ft_putstr(s);
 		ft_putchar('\0');
+		count += ft_putstr(s);
 		return (count + 1);
 	}
-	return (0);
+	count += ft_putstr(s);
+	ft_putchar('\0');
+	return (count + 1);
 }

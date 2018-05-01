@@ -2,7 +2,7 @@ NAME = libftprintf.a
 
 SRCS_PATH =  
 SRCS = ft_printf.c parser.c converter.c uconverter.c padding.c \
-	   convert_unicode.c set_conv.c
+	   convert_unicode.c set_conv.c get_flags.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -24,7 +24,7 @@ libftcomp:
 
 $(NAME): libftcomp  $(OBJS) $(LIB)
 	@libtool -static -o $(NAME) $(LIB) $(OBJS)
-#	@echo "\033[31;3m\nCompiling Done !\033[0m"
+	@echo "\033[31;3m\nCompiling Done !\033[0m"
 
 $(OBJS): $(OBJS_PATH) $(SRCS) $(INCLUDES_PATH)
 	@gcc -c $(SRCS) $(CFLAGS)
@@ -41,12 +41,12 @@ clean:
 	@make clean -C libft/
 	@rm -f $(OBJS)
 	@rmdir $(OBJS_PATH) 2> /dev/null || true
-#	@echo "\033[32;3mCleaning Done !\n\033[0m"
+	@echo "\033[32;3mCleaning Done !\n\033[0m"
 
 fclean: clean
 	@echo "\033[32;5mFcleaning..."
 	@make fclean -C libft/
 	@rm -f $(NAME)
-#	@echo "\033[32;3mFcleaning Done !\n\033[0m"
+	@echo "\033[32;3mFcleaning Done !\n\033[0m"
 
 re: fclean all

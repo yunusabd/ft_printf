@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/13 12:03:52 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/30 18:20:07 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/05/01 15:24:19 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,8 @@
 # include <stdio.h>
 
 # define BUFFSIZE 20
-# define LARGEST(x, y) (x) >= (y) ? (x) : (y)
 # define SPECIFIERS "sSpdDioOuUxXcCb%"
-# define VALID_CHARS "sSpdDioOuUxXcCb%lhjz"
+# define VALID_CHARS "sSpdDioOuUxXcCb%lhjz-+0123456789. #"
 # define SP_LEN (ft_strlen(SPECIFIERS))
 
 typedef struct	s_printf
@@ -68,6 +67,8 @@ char			*wstring(wchar_t *s);
 char			*init_d(va_list ap, t_printf *specs);
 char			*init_s(va_list ap, t_printf *specs);
 char			*handle_percent(t_printf *specs);
-int				empty_string(char *s, t_printf *specs, int count);
+int				empty_string(t_printf *specs, int count);
+char			*get_len(char *fstr, t_printf *specs);
+char			*get_flags(char *fstr, t_printf *specs);
 
 #endif

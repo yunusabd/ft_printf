@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 23:06:43 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/30 18:09:46 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/05/01 18:02:40 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,27 +30,34 @@ void			print_struct(t_printf *specs)
 	printf("isz: %d\n", specs->isz);
 	printf("converter: %c\n", specs->converter);
 	printf("negative: %d\n", specs->negative);
-	printf("printed: %d\n", specs->printed);
 }
 
 int		main()
 {
-	printf("Return: %d\n", ft_printf(""));
+	wchar_t s[4];
+
+	setlocale(LC_ALL, "");
+
+	s[0] = 'S';
+	s[1] = 254;
+	s[2] = 'u';
+	s[3] = '\0';
+	printf("\nReturn: %d\n", ft_printf("%---8C et coco %1C titi", 3250, 0xffff));
 	printf("\n------------\n");
 
-	printf("");
+	printf("\nReturn: %d\n", printf("%---8C et coco %1C titi", 3250, 0xffff));
 	printf("\n------------\n");
-/*
-	res = ft_printf("%x\n", "this is a string.");
-	printf("\nResult: %d\n", res);
+	/*
+	   res = ft_printf("%x\n", "this is a string.");
+	   printf("\nResult: %d\n", res);
 	//	re2 = printf("%+c", 48);
 	re2 = printf("%x\n", "this is a string.");
 	printf("\nResult: %d\n", re2);
-		printf("\nResult: %d\n", ft_printf("[%5p]\n", 0));
-		ft_printf("%");
-		printf("\n");
-		printf("%");
-		while (1);
-*/
+	printf("\nResult: %d\n", ft_printf("[%5p]\n", 0));
+	ft_printf("%");
+	printf("\n");
+	printf("%");
+	while (1);
+	*/
 	return (0);
 }

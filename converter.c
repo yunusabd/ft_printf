@@ -6,48 +6,11 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/09 14:18:55 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/30 16:21:35 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/05/01 15:22:59 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_printf.h"
-
-static void		truncate_wstr(char *str, t_printf *specs)
-{
-	if ((specs->converter == 'S' || specs->isl == 1) && specs->precision)
-	{
-		while ((specs->converter == 'S' || specs->isl == 1) &&
-				(*(str + specs->precision) & 0xC0) == 0x80)
-			specs->precision -= 1;
-		ft_strclr(str + specs->precision);
-	}
-}
-
-char			*convert_s(char *str, t_printf *specs)
-{
-	char	*tmp;
-	int		len;
-
-	if ((int)ft_strlen(str) > specs->precision && specs->precision > 0)
-		truncate_wstr(str, specs);
-	if (specs->precision == 0)
-		str = ft_strdup("");
-	else if (specs->precision > 0 && specs->precision < (int)ft_strlen(str))
-		str = ft_strndup(str, specs->precision);
-	if (specs->width > 0 && specs->width > (int)ft_strlen(str))
-	{
-		len = specs->width - ft_strlen(str);
-		len = (specs->negative) ? (len - 1) : (len);
-		tmp = ft_strnew(len);
-		tmp = ft_memset((void*)tmp, (specs->iszero &&
-					!specs->isminus) ? '0' : ' ', len);
-		if (specs->isminus)
-			str = ft_strjoinfree(str, tmp, 3);
-		else
-			str = ft_strjoinfree(tmp, str, 3);
-	}
-	return (str);
-}
 
 char			*convert_c(va_list ap, t_printf *specs)
 {

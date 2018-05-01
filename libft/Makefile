@@ -6,7 +6,7 @@
 #    By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/10 22:06:52 by yabdulha          #+#    #+#              #
-#    Updated: 2018/04/28 17:55:23 by yabdulha         ###   ########.fr        #
+#    Updated: 2018/05/01 18:35:46 by yabdulha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,10 +31,11 @@ FT_C =	$(patsubst %,%.c,$(FILES))
 OBJ  =	$(patsubst %,%.o,$(FILES))
 
 .PHONY: all clean fclean re
+.SILENT: all clean fclean re $(NAME) $(OBJ)
 
 all: $(NAME)
 
-$(OBJ):
+$(OBJ): $(FT_C)
 	$(CC) $(FLAGS) -c $(FT_C)
 
 $(NAME): $(OBJ)

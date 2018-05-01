@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/10 20:44:26 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/30 18:20:22 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/05/01 17:22:30 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,17 @@
 
 #include <wchar.h>
 
-int			print_arg(va_list ap, t_printf *specs, char *s, int count)
+static int		print_string(char *s)
+{
+	int count;
+
+	count = 0;
+	count += ft_putstr(s);
+	free(s);
+	return (count);
+}
+
+static int		print_arg(va_list ap, t_printf *specs, char *s, int count)
 {
 	if (specs->converter == '%')
 		s = handle_percent(specs);
@@ -25,6 +35,8 @@ int			print_arg(va_list ap, t_printf *specs, char *s, int count)
 	else if (specs->converter == 'o' || specs->converter == 'O')
 		s = convert_o(ap, specs);
 	else if (specs->converter == 'd' || specs->converter == 'i')
+		s = convert_d(ap, specs);
+	else if (specs->converter == 'D')
 		s = init_d(ap, specs);
 	else if (specs->converter == 'u' || specs->converter == 'U')
 		s = convert_u(ap, specs);
@@ -32,56 +44,55 @@ int			print_arg(va_list ap, t_printf *specs, char *s, int count)
 	{
 		s = convert_c(ap, specs);
 		if (s == NULL)
-			return (empty_string(s, specs, count));
+			return (empty_string(specs, count));
 	}
 	else if (specs->converter == 's' || specs->converter == 'S')
 		s = init_s(ap, specs);
-	else if ((specs->width)--)
-		s = padding(ft_strdup(""), specs);
-	count += ft_putstr(s);
-	free(s);
-	return (count);
+	else if (specs->converter)
+		s = init_s(ap, specs);
+	return (print_string(s));
 }
 
-int			ft_printf(char *format, ...)
+static int		parse_format(va_list ap, char **format)
+{
+	t_printf	new;
+
+	ft_memset(&new, 0, sizeof(t_printf));
+	new.converter = 0;
+	*format = parse_spec(*format, &new);
+	return (print_arg(ap, &new, NULL, 0));
+}
+
+int				ft_printf(char *format, ...)
 {
 	va_list		ap;
 	int			i;
-	t_printf	new;
 	int			ret;
 	char		*tmp;
 
-	setlocale(LC_ALL, "");
 	va_start(ap, format);
 	ret = 0;
 	i = 0;
 	tmp = ft_strnew(BUFFSIZE);
 	while (*format)
 	{
-		while (i < BUFFSIZE && *format && *format != '%')
-		{
-			tmp[i] = *format;
-			i++;
-			format++;
-			ret++;
-		}
+		while (i < BUFFSIZE && *format && *format != '%' && ++ret)
+			tmp[i++] = *(format++);
 		if (i)
 			write(1, tmp, i);
 		ft_bzero((void*)tmp, i);
 		i = 0;
 		if (*format == '%')
-		{
-			ft_memset(&new, 0, sizeof(t_printf));
-			format = parse_spec(format, &new);
-			ret += print_arg(ap, &new, NULL, 0);
-		}
+			ret += (parse_format(ap, &format));
 	}
 	if (i)
 		write(1, tmp, i);
+	free(tmp);
+	va_end(ap);
 	return (ret);
 }
 
-size_t		ft_wchar_len(wchar_t wc)
+size_t			ft_wchar_len(wchar_t wc)
 {
 	if ((int)wc >= 0 && (int)wc <= 0x7F)
 		return (1);

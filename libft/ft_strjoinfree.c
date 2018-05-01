@@ -6,12 +6,12 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 16:32:17 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/04/30 16:57:25 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/05/01 15:27:26 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
+
 static void		free_str(char *s1, char *s2, int del)
 {
 	if (del == 1)
