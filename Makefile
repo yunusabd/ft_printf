@@ -1,63 +1,56 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2018/05/02 19:26:07 by yabdulha          #+#    #+#              #
+#    Updated: 2018/05/02 19:27:59 by yabdulha         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = libftprintf.a
 
-SRCS_PATH = srcs
-SRC_FILES = ft_printf.c parser.c converter.c uconverter.c padding.c \
-			convert_unicode.c set_conv.c get_flags.c
-SRCS = $(addprefix $(SRCS_PATH)/,$(SRC_FILES))
+FT = ft_printf convert_unicode converter get_flags padding parser set_conv \
+	 uconverter
 
-OBJS_PATH = objects
-OBJS_NAME = $(SRC_FILES:.c=.o)
-OBJS = $(addprefix $(OBJS_PATH)/,$(OBJS_NAME))
+LIB = libft/libft.a
 
-INCLUDES_PATH = includes
-INCLUDES_NAME = ft_printf.h
-INCLUDES = $(addprefix $(INCLUDES_PATH)/,$(INCLUDES_NAME))
+SRC = srcs/
+INC = includes/
+LIBPATH = libft/
+OBJ = objects/
 
-CFLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Werror -Wextra
 
-LIBFT_PATH = libft
-LIBFT = $(addprefix $(LIBFT_PATH)/,libft.a)
+FT_C = $(patsubst %,$(SRC)%.c,$(FT))
+FT_O = $(patsubst %,%.o,$(FT))
+FT_O_OBJ = $(patsubst %,$(OBJ)%.o,$(FT))
 
-.SILENT: all, clean, fclean, re
-.PHONY: all, clean, fclean, re
+.PHONY: all clean fclean re
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJS)
-	@echo "\033[31;5;mCompiling ft_printf...\033[0m"
-	ar rc $(NAME) $(OBJS)
+$(LIB):
+	make -C $(LIBPATH) all
+	cp $(LIB) $(NAME)
+
+$(FT_O_OBJ): $(LIB)
+	gcc -I $(INC) $(FLAGS) -c $(FT_C)
+	mkdir $(OBJ) 2> /dev/null || true
+	mv $(FT_O) $(OBJ)
+
+$(NAME): $(FT_O_OBJ)
+	ar rc $(NAME) $(FT_O_OBJ)
 	ranlib $(NAME)
-	@echo "\033[32;3m\nCompiling Done !\033[0m"
-
-$(LIBFT):
-	@echo "\033[31;5;mCompiling libft...\033[0m"
-	@make all -C libft/
-	cp $(LIBFT) .
-	mv libft.a $(NAME)
-
-$(OBJS): $(OBJS_PATH) $(SRCS) $(INCLUDES_PATH)
-	@echo "compiling source"
-	gcc -c $(SRCS) $(CFLAGS) -I$(INCLUDES_PATH)
-	@mv $(OBJS_NAME) $(OBJS_PATH)
-
-$(OBJS_PATH):
-	@mkdir $(OBJS_PATH) 2> /dev/null || true
-
-$(INCLUDES_PATH):
-	@mkdir $(INCLUDES_PATH) 2> /dev/null || true
-	@mv $(INCLUDE_NAME) $(INCLUDES_PATH)
 
 clean:
-	@echo "\033[32;5mCleaning..."
-	@make clean -C libft/
-	@rm -f $(OBJS)
-	@rmdir $(OBJS_PATH) 2> /dev/null || true
-	@echo "\033[32;3mCleaning Done !\n\033[0m"
+	make -C $(LIBPATH) clean
+	/bin/rm -rf $(OBJ)
 
 fclean: clean
-	@echo "\033[32;5mFcleaning..."
-	@make fclean -C libft/
-	@rm -f $(NAME)
-	@echo "\033[32;3mFcleaning Done !\n\033[0m"
+	/bin/rm -f $(LIB)
+	/bin/rm -f $(NAME)
 
 re: fclean all
