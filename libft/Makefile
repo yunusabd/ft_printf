@@ -6,13 +6,13 @@
 #    By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/10 22:06:52 by yabdulha          #+#    #+#              #
-#    Updated: 2018/05/01 18:35:46 by yabdulha         ###   ########.fr        #
+#    Updated: 2018/05/02 16:01:34 by yabdulha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 CC = gcc
-FLAGS = -Wall -Werror -Wextra
+FLAGS = -Werror -Wextra -Wall
 FILES = ft_putchar ft_putstr ft_strcmp ft_strlen ft_strdup ft_strcpy ft_strcat \
 		ft_strncat ft_strlcat ft_strstr ft_strncmp ft_atoi ft_toupper \
 		ft_tolower ft_putnbr ft_isalpha ft_isdigit ft_isprint ft_itoa \
@@ -31,21 +31,20 @@ FT_C =	$(patsubst %,%.c,$(FILES))
 OBJ  =	$(patsubst %,%.o,$(FILES))
 
 .PHONY: all clean fclean re
-.SILENT: all clean fclean re $(NAME) $(OBJ)
 
 all: $(NAME)
 
 $(OBJ): $(FT_C)
 	$(CC) $(FLAGS) -c $(FT_C)
 
-$(NAME): $(OBJ)
-	ar rc $(NAME) $(OBJ)
-	ranlib $(NAME)
+$(NAME): $(FT_C) $(OBJ)
+	@ar rc $(NAME) $(OBJ)
+	@ranlib $(NAME)
 
 clean:
-	/bin/rm -f $(OBJ)
+	@/bin/rm -f $(OBJ)
 
 fclean: clean
-	/bin/rm -f $(NAME)
+	@/bin/rm -f $(NAME)
 
 re: fclean all

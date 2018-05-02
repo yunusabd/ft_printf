@@ -1,33 +1,41 @@
 NAME = libftprintf.a
 
-SRCS_PATH =  
-SRCS = ft_printf.c parser.c converter.c uconverter.c padding.c \
-	   convert_unicode.c set_conv.c get_flags.c
+SRCS_PATH = srcs
+SRC_FILES = ft_printf.c parser.c converter.c uconverter.c padding.c \
+			convert_unicode.c set_conv.c get_flags.c
+SRCS = $(addprefix $(SRCS_PATH)/,$(SRC_FILES))
 
-OBJS = $(SRCS:.c=.o)
+OBJS_PATH = objects
+OBJS_NAME = $(SRC_FILES:.c=.o)
+OBJS = $(addprefix $(OBJS_PATH)/,$(OBJS_NAME))
 
 INCLUDES_PATH = includes
 INCLUDES_NAME = ft_printf.h
 INCLUDES = $(addprefix $(INCLUDES_PATH)/,$(INCLUDE_NAME))
 
-CFLAGS = -Wall -Werror -Wextra
-LIB = libft/libft.a
+CFLAGS = -Wall -Wextra -Werror
+
+LIBFT_PATH = libft
+LIB = $(addprefix $(LIBFT_PATH)/,libft.a)
 
 .SILENT: all, clean, fclean, re
 .PHONY: all, clean, fclean, re
 
 all: $(NAME)
 
-libftcomp:
-	@echo "\033[31;5;mCompiling Printf...\033[0m"
-	@make -C libft/
-
-$(NAME): libftcomp  $(OBJS) $(LIB)
+$(NAME): libftcomp $(OBJS) $(LIB)
+	@echo "\033[31;5;mCompiling ft_printf...\033[0m"
 	@libtool -static -o $(NAME) $(LIB) $(OBJS)
-	@echo "\033[31;3m\nCompiling Done !\033[0m"
+	@echo "\033[32;3m\nCompiling Done !\033[0m"
+
+libftcomp:
+	@echo "\033[31;5;mCompiling libft...\033[0m"
+	@make all -C libft/
 
 $(OBJS): $(OBJS_PATH) $(SRCS) $(INCLUDES_PATH)
-	@gcc -c $(SRCS) $(CFLAGS)
+	@echo "compiling source"
+	gcc -c $(SRCS) $(CFLAGS) -I$(INCLUDES_PATH)
+	@mv $(OBJS_NAME) $(OBJS_PATH)
 
 $(OBJS_PATH):
 	@mkdir $(OBJS_PATH) 2> /dev/null || true
