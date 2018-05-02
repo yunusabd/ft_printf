@@ -25,7 +25,7 @@ all: $(NAME)
 
 $(NAME): libftcomp $(OBJS) $(LIB)
 	@echo "\033[31;5;mCompiling ft_printf...\033[0m"
-	ar rc $(NAME) $(LIB) $(OBJS)
+	ar rc $(NAME) $(OBJS)
 	ranlib $(NAME)
 	@echo "\033[32;3m\nCompiling Done !\033[0m"
 
