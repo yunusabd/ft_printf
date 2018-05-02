@@ -11,7 +11,7 @@ OBJS = $(addprefix $(OBJS_PATH)/,$(OBJS_NAME))
 
 INCLUDES_PATH = includes
 INCLUDES_NAME = ft_printf.h
-INCLUDES = $(addprefix $(INCLUDES_PATH)/,$(INCLUDE_NAME))
+INCLUDES = $(addprefix $(INCLUDES_PATH)/,$(INCLUDES_NAME))
 
 CFLAGS = -Wall -Wextra -Werror
 
@@ -23,7 +23,7 @@ LIBFT = $(addprefix $(LIBFT_PATH)/,libft.a)
 
 all: $(NAME)
 
-$(NAME): $(LIB) $(OBJS) $(LIB)
+$(NAME): $(LIB) $(OBJS)
 	@echo "\033[31;5;mCompiling ft_printf...\033[0m"
 	ar rc $(NAME) $(OBJS)
 	ranlib $(NAME)
@@ -32,6 +32,7 @@ $(NAME): $(LIB) $(OBJS) $(LIB)
 $(LIB):
 	@echo "\033[31;5;mCompiling libft...\033[0m"
 	@make all -C libft/
+	cp $(LIB) $(NAME)
 
 $(OBJS): $(OBJS_PATH) $(SRCS) $(INCLUDES_PATH)
 	@echo "compiling source"
