@@ -16,20 +16,20 @@ INCLUDES = $(addprefix $(INCLUDES_PATH)/,$(INCLUDE_NAME))
 CFLAGS = -Wall -Wextra -Werror
 
 LIBFT_PATH = libft
-LIB = $(addprefix $(LIBFT_PATH)/,libft.a)
+LIBFT = $(addprefix $(LIBFT_PATH)/,libft.a)
 
 .SILENT: all, clean, fclean, re
 .PHONY: all, clean, fclean, re
 
 all: $(NAME)
 
-$(NAME): libftcomp $(OBJS) $(LIB)
+$(NAME): $(LIB) $(OBJS) $(LIB)
 	@echo "\033[31;5;mCompiling ft_printf...\033[0m"
 	ar rc $(NAME) $(OBJS)
 	ranlib $(NAME)
 	@echo "\033[32;3m\nCompiling Done !\033[0m"
 
-libftcomp:
+$(LIB):
 	@echo "\033[31;5;mCompiling libft...\033[0m"
 	@make all -C libft/
 
