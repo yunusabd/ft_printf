@@ -6,7 +6,7 @@
 /*   By: yabdulha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/13 12:03:52 by yabdulha          #+#    #+#             */
-/*   Updated: 2018/05/01 15:24:19 by yabdulha         ###   ########.fr       */
+/*   Updated: 2018/05/02 17:19:43 by yabdulha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include "../libft/libft.h"
 # include <limits.h>
 # include <locale.h>
-# include <stdio.h>
 
 # define BUFFSIZE 20
 # define SPECIFIERS "sSpdDioOuUxXcCb%"
@@ -45,12 +44,6 @@ typedef struct	s_printf
 	int		negative;
 
 }				t_printf;
-
-typedef struct	s_ret
-{
-	char	*value;
-	int		len;
-}				t_ret;
 
 char			*parse_spec(char *str, t_printf *specs);
 int				ft_printf(char *format, ...);
