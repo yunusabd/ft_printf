@@ -23,16 +23,17 @@ LIBFT = $(addprefix $(LIBFT_PATH)/,libft.a)
 
 all: $(NAME)
 
-$(NAME): $(LIB) $(OBJS)
+$(NAME): $(LIBFT) $(OBJS)
 	@echo "\033[31;5;mCompiling ft_printf...\033[0m"
 	ar rc $(NAME) $(OBJS)
 	ranlib $(NAME)
 	@echo "\033[32;3m\nCompiling Done !\033[0m"
 
-$(LIB):
+$(LIBFT):
 	@echo "\033[31;5;mCompiling libft...\033[0m"
 	@make all -C libft/
-	cp $(LIB) $(NAME)
+	cp $(LIBFT) .
+	mv libft.a $(NAME)
 
 $(OBJS): $(OBJS_PATH) $(SRCS) $(INCLUDES_PATH)
 	@echo "compiling source"
